@@ -91,8 +91,8 @@ app.get('/api/setup/:id', (req, res) => {
 
 app.put('/api/setup/:id', express.json(), (req, res) => {
     const gameId = req.params.id;
-    const { board, player } = req.body;
-    pool.query('UPDATE gamedb SET board = ?, player = ? WHERE id = ?', [board, player, gameId], (err, results) => {
+    const { board,off, player } = req.body;
+    pool.query('UPDATE gamedb SET board = ?, player = ?, office = ? WHERE id = ?', [board, player,off, gameId], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: 'Game not found' });
         res.json({ id: gameId, board, player }); // Trả về thông tin game đã cập nhật
