@@ -45,6 +45,19 @@ app.post('/api/players', express.json(), (req, res) => {
     res.status(201).json({ id: results.insertId, name, score }); // Trả về thông tin người chơi vừa thêm
   });
 });
+app.post('api/login', express.json(), (req, res) => {
+    const { username, password } = req.body;
+    pool.query('SELECT * FROM player WHERE name = ? AND password = ?', [username, password], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (results.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+        const user = results[0];
+        res.json({
+        id: user.id,
+        username: user.username
+        }); // Trả về thông tin người chơi nếu đăng nhập thành công
+    });
+    }
+);
 app.put('/api/players/:id', express.json(), (req, res) => {
   const playerId = req.params.id;
   const { name, score } = req.body;
