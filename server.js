@@ -84,15 +84,17 @@ app.get('/api/setup/:id', (req, res) => {
     res.json({
         board: game.board,
         off: game.office,
-        player: game.player
+        player: game.player,
+        active: game.active,
+        lstplay: game.lstplay
     }); // Trả về danh sách game
   });
 });
 
 app.put('/api/setup/:id', express.json(), (req, res) => {
     const gameId = req.params.id;
-    const { board,off, player } = req.body;
-    pool.query('UPDATE gamedb SET board = ?, player = ?, office = ? WHERE id = ?', [board, player,off, gameId], (err, results) => {
+    const { board,off, player, active, lstplay } = req.body;
+    pool.query('UPDATE gamedb SET board = ?, player = ?, office = ?, active = ?, lstplay = ? WHERE id = ?', [board, player,off,  active, lstplay,gameId], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         if (results.affectedRows === 0) return res.status(404).json({ error: 'Game not found' });
         res.json({ id: gameId, board, player }); // Trả về thông tin game đã cập nhật
@@ -101,8 +103,8 @@ app.put('/api/setup/:id', express.json(), (req, res) => {
 );
 
 app.post('/api/createGame', express.json(), (req, res) => {
-    const { id, board, off, player } = req.body;
-    pool.query('INSERT INTO gamedb (id, board, player, office) VALUES (?, ?, ?, ?)', [id, board, player, off], (err, results) => {
+    const { id, board, off, player, active, lstplay } = req.body;
+    pool.query('INSERT INTO gamedb (id, board, player, office, active, lstplay) VALUES (?, ?, ?, ?,?,?)', [id, board, player, off, active,lstplay], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ id: id , board: board, player: player, off: off }); // Trả về thông tin game vừa thêm
     });
