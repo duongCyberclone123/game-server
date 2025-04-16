@@ -75,8 +75,9 @@ app.delete('/api/players/:id', (req, res) => {
     res.status(204).send(); // Trả về 204 No Content khi xóa thành công
   });
 });
-app.get('/api/setup', (req, res) => {
-  pool.query('SELECT * FROM gamedb', (err, results) => {
+app.get('/api/setup/:id', (req, res) => {
+    const gameId = req.params.id;
+  pool.query('SELECT * FROM gamedb WHERE id = ?',[gameId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
     const game = results[0];
