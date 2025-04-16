@@ -45,7 +45,7 @@ app.post('/api/players', express.json(), (req, res) => {
     res.status(201).json({ id: results.insertId, name, score }); // Trả về thông tin người chơi vừa thêm
   });
 });
-app.post('api/login', express.json(), (req, res) => {
+app.post('/api/login', express.json(), (req, res) => {
     const { username, password } = req.body;
     pool.query('SELECT * FROM player WHERE name = ? AND password = ?', [username, password], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -82,7 +82,7 @@ app.get('api/Game', (req, res) => {
   });
 });
 
-app.post('api/createGame', express.json(), (req, res) => {
+app.post('/api/createGame', express.json(), (req, res) => {
     const { id, board, player } = req.body;
     pool.query('INSERT INTO Game (id, board, player) VALUES (?, ?, ?)', [id, board, player], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
