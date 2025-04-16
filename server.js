@@ -47,7 +47,7 @@ app.post('/api/players', express.json(), (req, res) => {
 });
 app.post('api/login', express.json(), (req, res) => {
     const { username, password } = req.body;
-    pool.query('SELECT * FROM player WHERE name = ? AND password = ?', [username, password], (err, results) => {
+    pool.query('SELECT * FROM player WHERE uname = ? AND password = ?', [username, password], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         if (results.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
         const user = results[0];
