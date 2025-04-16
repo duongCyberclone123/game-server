@@ -75,10 +75,15 @@ app.delete('/api/players/:id', (req, res) => {
     res.status(204).send(); // Trả về 204 No Content khi xóa thành công
   });
 });
-app.get('api/Game', (req, res) => {
-  pool.query('SELECT * FROM Game', (err, results) => {
+app.get('api/setup', (req, res) => {
+  pool.query('SELECT * FROM gamedb', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json(results); // Trả về danh sách game
+    if (results.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+    const game = results[0];
+    res.json({
+        board: game.board,
+        player: game.player
+    }); // Trả về danh sách game
   });
 });
 
