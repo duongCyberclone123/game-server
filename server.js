@@ -81,6 +81,15 @@ app.get('api/Game', (req, res) => {
     res.json(results); // Trả về danh sách game
   });
 });
+
+application.post('api/createGame', express.json(), (req, res) => {
+    const { id, board, player } = req.body;
+    pool.query('INSERT INTO Game (id, board, player) VALUES (?, ?, ?)', [id, board, player], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ id , board, player }); // Trả về thông tin game vừa thêm
+    });
+    }
+);
 // Cổng chạy API (Railway tự set PORT)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ API chạy tại http://localhost:${PORT}`));
