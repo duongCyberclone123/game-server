@@ -82,7 +82,7 @@ app.get('api/Game', (req, res) => {
   });
 });
 
-application.post('api/createGame', express.json(), (req, res) => {
+app.post('api/createGame', express.json(), (req, res) => {
     const { id, board, player } = req.body;
     pool.query('INSERT INTO Game (id, board, player) VALUES (?, ?, ?)', [id, board, player], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
